@@ -5,13 +5,21 @@ import { Link } from 'react-router-dom'
 const AllCountries = () => {
     const [allCountries, setAllCountries] = useState([]);
     const baseUrl = 'https://restcountries.com/v3.1/';
-
     const [search, setSearch] = useState([])
     const handleSubmit = (e) => e.preventDefault()
+
     const handleSearch = (e) => {
         if (!e.target.value) return setSearch(allCountries)
-        const resultArray =
-            allCountries.filter(country => country.name.common.includes(e.target.value))
+        const resultArray = allCountries
+            .filter(country => country.name.common.includes(e.target.value))
+        setSearch(resultArray)
+        console.log(resultArray)
+    }
+
+    const handleFilter = (e) => {
+        if (!e.target.value) return setSearch(allCountries)
+        const resultArray = allCountries
+            .filter(region => region.region.includes(e.target.value))
         setSearch(resultArray)
         console.log(resultArray)
     }
@@ -28,6 +36,7 @@ const AllCountries = () => {
             }
             )
     }, [])
+
     return (
         <div onSubmit={handleSubmit}>
             <div>
@@ -36,6 +45,21 @@ const AllCountries = () => {
                     placeholder="search for a country"
                     onChange={handleSearch} />
             </div >
+            {
+                <select
+                    onChange={handleFilter}
+                    className="custom-select"
+                    aria-label="Filter Countries By Region"
+                >
+                    <option value="All">Filter By Region</option>
+                    <option value="Africa">Africa</option>
+                    <option value="Americas">America</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Europe">Europe</option>
+                    <option value="Oceania">Oceania</option>
+                </select>
+
+            }
             <div styles={search ? 'block' : 'none'} >
                 {
                     search.map((country, i) =>
@@ -50,6 +74,7 @@ const AllCountries = () => {
                         </div>
                     )
                 }
+
             </div>
 
         </div>
